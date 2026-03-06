@@ -171,10 +171,9 @@ async function startScanner() {
           throw new Error("No intern ID found in QR code");
         }
 
-        const response = await fetch(decodedText);
-        const result = await response.text();
+await fetch(decodedText, { mode: "no-cors" });
 
-        setStatus("✓ Clock-in recorded for " + id, "success");
+setStatus("✓ Clock-in recorded for " + id, "success");
 
         setTimeout(() => {
           setStatus("Ready to scan");
