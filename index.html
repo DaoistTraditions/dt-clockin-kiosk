@@ -100,7 +100,7 @@ async function startScanner() {
 
   try {
     const testStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" },
+      video: { facingMode: "user" },
       audio: false
     });
 
@@ -113,12 +113,12 @@ async function startScanner() {
       throw new Error("No cameras found");
     }
 
-    let cameraId = cameras[0].id;
-    const backCam = cameras.find(c =>
-      (c.label || "").toLowerCase().includes("back") ||
-      (c.label || "").toLowerCase().includes("rear")
-    );
-    if (backCam) cameraId = backCam.id;
+let cameraId = cameras[0].id;
+const frontCam = cameras.find(c =>
+  (c.label || "").toLowerCase().includes("front") ||
+  (c.label || "").toLowerCase().includes("user")
+);
+if (frontCam) cameraId = frontCam.id;
 
     await html5QrCode.start(
       cameraId,
