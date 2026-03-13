@@ -157,38 +157,41 @@ if (frontCam) cameraId = frontCam.id;
       setStatus("Tap Start Scanner");
     }
 
-    async function onScanSuccess(decodedText) {
-      if (isLogging) return;
-      isLogging = true;
+async function onScanSuccess(decodedText) {
+  if (isLogging) return;
+  isLogging = true;
 
-      setStatus("Clocking in...");
+  setStatus("Clocking in...");
 
-      try {
-        const url = new URL(decodedText);
-        const id = url.searchParams.get("id");
+  try {
+    const id = decodedText.trim();
 
-        if (!id) {
-          throw new Error("No intern ID found in QR code");
-        }
-
-await fetch(decodedText, { mode: "no-cors" });
-
-setStatus("✓ Clock-in recorded for " + id, "success");
-
-        setTimeout(() => {
-          setStatus("Ready to scan");
-          isLogging = false;
-        }, 2000);
-
-      } catch (err) {
-        console.error(err);
-        setStatus("Scan failed. Try again.", "error");
-        setTimeout(() => {
-          setStatus("Ready to scan");
-          isLogging = false;
-        }, 2000);
-      }
+    if (!id) {
+      throw new Error("No name found in QR code");
     }
+
+    const logUrl =
+      "https://script.google.com/macros/s/AKfycbxtutOVH8TgJsnd5OT0T8jYNxf0YF1r4b_oEZj-RxQfaQi4hS5fgbncE24D7vkeRPq8/exec?action=log&id="
+      + encodeURIComponent(id);
+
+    await fetch(logUrl, { mode: "no-cors" });
+
+    setStatus("✓ Clock-in recorded for " + id, "success");
+
+    setTimeout(() => {
+      setStatus("Ready to scan");
+      isLogging = false;
+    }, 2000);
+
+  } catch (err) {
+    console.error(err);
+    setStatus("Scan failed. Try again.", "error");
+    setTimeout(() => {
+      setStatus("Ready to scan");
+      isLogging = false;
+    }, 2000);
+  }
+}
   </script>
 </body>
 </html>
