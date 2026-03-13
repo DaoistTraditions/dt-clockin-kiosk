@@ -122,7 +122,7 @@ if (frontCam) cameraId = frontCam.id;
 
     await html5QrCode.start(
       cameraId,
-      { fps: 10, qrbox: 250 },
+      { fps: 10, qrbox: { width: 250, height: 250 }},
       onScanSuccess,
       () => {}
     );
